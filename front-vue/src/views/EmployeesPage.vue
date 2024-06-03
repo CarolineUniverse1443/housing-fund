@@ -3,16 +3,34 @@
 		<SideBar />
 		<WorkerProfile />
 	</div>
+	<button @click="getUser">User</button>
 </template>
 
 <script>
-import SideBar from '@/components/SideBar.vue'
-import WorkerProfile from '@/components/WorkerProfile.vue'
+import { computed } from "vue";
+import { useStore } from "vuex";
+import SideBar from '@/components/SideBar.vue';
+import WorkerProfile from '@/components/WorkerProfile.vue';
 export default {
 	components:
 	{
 		SideBar,
 		WorkerProfile
+	},
+	setup()
+	{
+		// подключаем стор
+		const store = useStore();
+		const users = computed(()=> store.state.user.users)
+		const getUser = () =>
+		{
+			// вызов запроса из стора
+			store.dispatch("GET_USER");
+			console.log(users)
+		}
+		return {
+			getUser
+		}
 	}
 }
 </script>

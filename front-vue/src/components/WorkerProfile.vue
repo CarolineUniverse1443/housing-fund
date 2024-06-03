@@ -1,6 +1,6 @@
 <template>
 	<div class="worker-profile">
-		<div class="worker-profile__wr" v-if="true">
+		<div class="worker-profile__wr" v-if="false">
 			<div class="worker-profile__img">
 				<img src="../assets/img/profile-photo.png" alt="worker photo">
 			</div>

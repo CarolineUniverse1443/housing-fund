@@ -11,7 +11,7 @@
 		<div class="sidebar__results">
 			<h2>Результаты</h2>
 			<div class="sidebar__results-list">
-				<WorkerCard v-if="true"/>
+				<WorkerCard v-if="false"/>
 				<span v-else>начните поиск</span>
 			</div>
 		</div>
