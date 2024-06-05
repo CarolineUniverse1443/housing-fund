@@ -1,13 +1,20 @@
 <template>
 	<div class="employees-page">
-		<SideBar />
-		<WorkerProfile />
+		<SideBar
+			:users="users"
+			@fetch="getUser"
+		/>
+		<WorkerProfile
+			:show-profile="showWorkerProfile"
+			:name="selectedUser.name"
+			:email="selectedUser.email"
+			:phone="selectedUser.phone"
+		/>
 	</div>
-	<button @click="getUser">User</button>
 </template>
 
 <script>
-import { computed } from "vue";
+import { ref, computed } from "vue";
 import { useStore } from "vuex";
 import SideBar from '@/components/SideBar.vue';
 import WorkerProfile from '@/components/WorkerProfile.vue';
@@ -21,15 +28,32 @@ export default {
 	{
 		// подключаем стор
 		const store = useStore();
-		const users = computed(()=> store.state.user.users)
+
+		// data
+		const showWorkerProfile = ref(false);
+		const selectedUser = ref(
+		{
+			name: 'Elineliz',
+			email: 'eline@mail.com',
+			phone: '+9 (345)-77-48',
+		});
+
+		// computed
+		const users = computed(()=> store.state.user.users);
+
+		// methods
 		const getUser = () =>
 		{
 			// вызов запроса из стора
 			store.dispatch("GET_USER");
-			console.log(users)
+			console.log(users);
 		}
+
 		return {
-			getUser
+			getUser,
+			showWorkerProfile,
+			selectedUser,
+			users,
 		}
 	}
 }

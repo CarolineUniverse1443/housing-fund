@@ -4,13 +4,24 @@
 			<img src="../assets/img/card-photo.png" alt="worker photo">
 		</div>
 		<div class="worker-card__info">
-			<p class="worker-card__info-title">Bret</p>
-			<p class="worker-card__info-email">Sincere@april.biz</p>
+			<p class="worker-card__info-title">
+				{{ nickname }}
+			</p>
+			<p class="worker-card__info-email">
+				{{ email }}
+			</p>
 		</div>
 	</div>
 </template>
 
 <script>
+export default {
+	props:
+	{
+		nickname: String,
+		email: String,
+	},
+}
 </script>
 
 <style lang="scss">
@@ -18,6 +29,7 @@
 {
 	overflow: hidden;
 	display: flex;
+	flex-shrink: 0;
 	border-radius: 10px;
 	box-shadow: 0 0 10px rgba(0,0,0,0.1);
 	cursor: pointer;

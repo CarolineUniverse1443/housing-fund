@@ -21,7 +21,17 @@ export default {
 			{
 				const response = await mainApi.getUser();
 				const users = await response.json();
-				commit('setUser', users);
+				const formattedUsers = users.map((user) =>
+				{
+					return {
+						id: user.id,
+						name: user.name,
+						nickname: user.username,
+						email: user.email,
+						phone: user.phone,
+					};
+				});
+				commit('setUser', formattedUsers);
 			}
 			catch(e)
 			{

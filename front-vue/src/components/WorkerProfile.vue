@@ -1,16 +1,18 @@
 <template>
 	<div class="worker-profile">
-		<div class="worker-profile__wr" v-if="false">
+		<div class="worker-profile__wr" v-if="showProfile">
 			<div class="worker-profile__img">
 				<img src="../assets/img/profile-photo.png" alt="worker photo">
 			</div>
 			<div class="worker-profile__info">
-				<h2 class="worker-profile__info-title">Ervin Howell</h2>
+				<h2 class="worker-profile__info-title">
+					{{ name }}
+				</h2>
 				<p class="worker-profile__info-text">
-					<span>email:</span>  Shanna@melissa.tv
+					<span>email:</span>  {{ email }}
 				</p>
 				<p class="worker-profile__info-text">
-					<span>phone:</span> 010-692-6593 x09125
+					<span>phone:</span> {{ phone }}
 				</p>
 				<h2 class="worker-profile__info-title">О себе:</h2>
 				<p class="worker-profile__info-desc">
@@ -23,6 +25,19 @@
 </template>
 
 <script>
+export default {
+	props:
+	{
+		showProfile:
+		{
+			type: Boolean,
+			default: false,
+		},
+		name: String,
+		email: String,
+		phone: String,
+	},
+}
 </script>
 
 <style lang="scss">
