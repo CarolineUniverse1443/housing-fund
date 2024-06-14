@@ -6,22 +6,27 @@
 				class="input"
 				type="text"
 				placeholder="Введите Id или имя"
+				v-model="searchText"
 			>
-			<button @click="getUsers">Сотрудники</button>
+			<button @click="getUser">Сотрудники</button>
 		</div>
 		<div class="sidebar__results">
 			<h2>Результаты</h2>
-			<span v-if="!users.length">начните поиск</span>
-			<div
-				class="sidebar__results-list"
-				v-else
-			>
-				<WorkerCard
-					v-for="user in users"
-					:key="user.id"
-					:nickname="user.nickname"
-					:email="user.email"
-				/>
+			<span v-if="isLoading">загрузка...</span>
+			<div v-else>
+				<span v-if="!users.length">{{ resultText }}</span>
+				<div
+					class="sidebar__results-list"
+					v-else
+				>
+					<WorkerCard
+						v-for="user in users"
+						:key="user.id"
+						:nickname="user.nickname"
+						:email="user.email"
+						@click="selectUser(user)"
+					/>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -35,27 +40,52 @@ export default {
 	{
 		WorkerCard,
 	},
-	emits: ['getUsers'],
+	emits: ['getUser', 'selectUser'],
 	props:
 	{
+		isLoading:
+		{
+			type: Boolean,
+			default: false,
+		},
 		users: Array,
+		resultText:
+		{
+			type: String,
+			default: '',
+		},
 	},
+	// props, { emit }
 	setup(props, { emit })
 	{
+		// data
+		const searchText = ref('');
 		const testUser = ref(
 		{
 			nickname: 'Elineliz',
 			email: 'eline@mail.com',
 		});
 
-		const getUsers = () =>
+		// methods
+		const getUser = () =>
 		{
-			emit('fetch');
+			// console.log(searchText.value);
+			emit('fetch', searchText.value);
+		}
+
+		const selectUser = (user) =>
+		{
+			console.log('sidebar', { ...user });
+			emit('select', { ...user });
 		}
 
 		return {
+			//data
+			searchText,
 			testUser,
-			getUsers,
+			//methods
+			getUser,
+			selectUser,
 		}
 	}
 }

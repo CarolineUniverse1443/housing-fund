@@ -1,4 +1,5 @@
 import { mainApi } from '@/api/main-api.js';
+import { userFormatter } from '@/services/formatters.js';
 
 export default {
 	state:
@@ -7,7 +8,7 @@ export default {
 	},
 	mutations:
 	{
-		setUser(state, users)
+		setUsers(state, users)
 		{
 			state.users = users;
 		}
@@ -15,23 +16,14 @@ export default {
 	actions:
 	{
 		// тут будет происходить запрос из mainApi для получения инфы юзера
-		async GET_USER({ commit })
+		async GET_USER({ commit }, id)
 		{
 			try
 			{
-				const response = await mainApi.getUser();
+				const response = await mainApi.getUser(id);
 				const users = await response.json();
-				const formattedUsers = users.map((user) =>
-				{
-					return {
-						id: user.id,
-						name: user.name,
-						nickname: user.username,
-						email: user.email,
-						phone: user.phone,
-					};
-				});
-				commit('setUser', formattedUsers);
+				const formattedUser = users.map(user => userFormatter(user));
+				commit('setUsers', formattedUser);
 			}
 			catch(e)
 			{

@@ -9,6 +9,9 @@
 					{{ name }}
 				</h2>
 				<p class="worker-profile__info-text">
+					<span>nickname:</span>  {{ nickname }}
+				</p>
+				<p class="worker-profile__info-text">
 					<span>email:</span>  {{ email }}
 				</p>
 				<p class="worker-profile__info-text">
@@ -34,6 +37,7 @@ export default {
 			default: false,
 		},
 		name: String,
+		nickname: String,
 		email: String,
 		phone: String,
 	},

@@ -2,11 +2,15 @@
 	<div class="employees-page">
 		<SideBar
 			:users="users"
+			:result-text="sidebarText"
+			:is-loading="isLoading"
 			@fetch="getUser"
+			@select="setProfileInfo"
 		/>
 		<WorkerProfile
 			:show-profile="showWorkerProfile"
 			:name="selectedUser.name"
+			:nickname="selectedUser.nickname"
 			:email="selectedUser.email"
 			:phone="selectedUser.phone"
 		/>
@@ -30,10 +34,13 @@ export default {
 		const store = useStore();
 
 		// data
+		const sidebarText = ref('начните поиск');
+		const isLoading = ref(false);
 		const showWorkerProfile = ref(false);
 		const selectedUser = ref(
 		{
-			name: 'Elineliz',
+			name: 'Elineliz Graerat',
+			nickname: 'Cute Elf',
 			email: 'eline@mail.com',
 			phone: '+9 (345)-77-48',
 		});
@@ -42,18 +49,37 @@ export default {
 		const users = computed(()=> store.state.user.users);
 
 		// methods
-		const getUser = () =>
+		const getUser = async (id) =>
 		{
+			isLoading.value = true;
 			// вызов запроса из стора
-			store.dispatch("GET_USER");
-			console.log(users);
+			await store.dispatch('GET_USER', id);
+			isLoading.value = false;
+
+			if (!users.value.length)
+				sidebarText.value = 'ничего не найдено';
+		}
+
+		const setProfileInfo = (user) =>
+		{
+			selectedUser.value.name = user.name;
+			selectedUser.value.nickname = user.nickname;
+			selectedUser.value.email = user.email;
+			selectedUser.value.phone = user.phone;
+
+			showWorkerProfile.value = true;
 		}
 
 		return {
-			getUser,
+			// data
+			sidebarText,
+			isLoading,
 			showWorkerProfile,
 			selectedUser,
 			users,
+			// methods
+			getUser,
+			setProfileInfo,
 		}
 	}
 }
