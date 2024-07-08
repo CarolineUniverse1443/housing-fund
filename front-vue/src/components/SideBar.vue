@@ -5,10 +5,11 @@
 			<input
 				class="input"
 				type="text"
-				placeholder="Введите Id или имя"
+				placeholder="Введите id сотрудника"
 				v-model="searchText"
+				@input="getUser"
 			>
-			<button @click="getUser">Сотрудники</button>
+			<span v-if="error" class="sidebar__error">неверный формат запроса!</span>
 		</div>
 		<div class="sidebar__results">
 			<h2>Результаты</h2>
@@ -34,7 +35,8 @@
 
 <script>
 import { ref } from "vue";
-import WorkerCard from '@/components/WorkerCard.vue'
+import WorkerCard from '@/components/WorkerCard.vue';
+
 export default {
 	components:
 	{
@@ -60,6 +62,7 @@ export default {
 	{
 		// data
 		const searchText = ref('');
+		const error = ref(false);
 		const testUser = ref(
 		{
 			nickname: 'Elineliz',
@@ -69,20 +72,28 @@ export default {
 		// methods
 		const getUser = () =>
 		{
-			// console.log(searchText.value);
-			emit('fetch', searchText.value);
-		}
+			if (isNaN(searchText.value))
+			{
+				error.value = true;
+				console.log('это не число', error.value);
+				return;
+			}
+
+			console.log('searchText', searchText.value);
+			error.value = false;
+			emit('search', searchText.value);
+		};
 
 		const selectUser = (user) =>
 		{
-			console.log('sidebar', { ...user });
 			emit('select', { ...user });
-		}
+		};
 
 		return {
 			//data
 			searchText,
 			testUser,
+			error,
 			//methods
 			getUser,
 			selectUser,
@@ -122,6 +133,7 @@ export default {
 
 .sidebar__search
 {
+	position: relative;
 	margin-bottom: 30px;
 	padding: 0 20px;
 }
@@ -137,6 +149,14 @@ export default {
 	border-radius: 8px;
 	color: #76787D;
 	margin-bottom: 10px;
+}
+
+.sidebar__error
+{
+	position: absolute;
+	left: 20px;
+	bottom: -18px;
+	color: red;
 }
 
 .sidebar__results

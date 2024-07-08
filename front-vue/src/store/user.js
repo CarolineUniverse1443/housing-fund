@@ -29,6 +29,21 @@ export default {
 			{
 				console.log(e);
 			}
+		},
+
+		async FETCH_USERS({ commit })
+		{
+			try
+			{
+				const response = await mainApi.fetchUsers();
+				const users = await response.json();
+				const formattedUsers = users.map(user => userFormatter(user));
+				commit('setUsers', formattedUsers);
+			}
+			catch(e)
+			{
+				console.log(e);
+			}
 		}
 	}
 };

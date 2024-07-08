@@ -5,7 +5,15 @@ class MainApi extends BaseApi
 {
 	getUser(id)
 	{
-		return fetch(`${this.baseUrl}?id=${id}`,{
+		return fetch(`${this.baseUrl}/users?id=${id}`, {
+			...this.getDefaultOptions(),
+			method: 'GET'
+		});
+	}
+
+	fetchUsers()
+	{
+		return fetch(`${this.baseUrl}/users`, {
 			...this.getDefaultOptions(),
 			method: 'GET'
 		});

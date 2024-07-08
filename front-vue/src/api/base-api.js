@@ -3,7 +3,7 @@
 export class BaseApi
 {
 	// урл, куда будут отправляться запросы
-	baseUrl = 'https://jsonplaceholder.typicode.com/users'
+	baseUrl = 'https://jsonplaceholder.typicode.com'
 	counstuctor() {}
 
 	// устанавливает заголовки для запроса

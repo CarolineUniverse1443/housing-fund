@@ -4,7 +4,7 @@
 			:users="users"
 			:result-text="sidebarText"
 			:is-loading="isLoading"
-			@fetch="getUser"
+			@search="getUser"
 			@select="setProfileInfo"
 		/>
 		<WorkerProfile
@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { ref, computed } from "vue";
+import { onMounted, ref, computed } from "vue";
 import { useStore } from "vuex";
 import SideBar from '@/components/SideBar.vue';
 import WorkerProfile from '@/components/WorkerProfile.vue';
@@ -30,6 +30,11 @@ export default {
 	},
 	setup()
 	{
+		onMounted(() => {
+			console.log('примонтирован!');
+			fetchUsers();
+		});
+
 		// подключаем стор
 		const store = useStore();
 
@@ -51,6 +56,13 @@ export default {
 		// methods
 		const getUser = async (id) =>
 		{
+			// выводить полный список при пустом поиске
+			if (!id)
+			{
+				await store.dispatch('FETCH_USERS');
+				return;
+			}
+
 			isLoading.value = true;
 			// вызов запроса из стора
 			await store.dispatch('GET_USER', id);
@@ -58,7 +70,13 @@ export default {
 
 			if (!users.value.length)
 				sidebarText.value = 'ничего не найдено';
-		}
+		};
+
+		const fetchUsers = async () =>
+		{
+			await store.dispatch('FETCH_USERS');
+			console.log('fetched');
+		};
 
 		const setProfileInfo = (user) =>
 		{
@@ -68,7 +86,7 @@ export default {
 			selectedUser.value.phone = user.phone;
 
 			showWorkerProfile.value = true;
-		}
+		};
 
 		return {
 			// data
@@ -79,6 +97,7 @@ export default {
 			users,
 			// methods
 			getUser,
+			fetchUsers,
 			setProfileInfo,
 		}
 	}
